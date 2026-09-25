@@ -1,0 +1,48 @@
+# Environnement virtuel
+env/
+venv/
+.venv/
+ENV/
+
+# Fichiers Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Base de données
+db.sqlite3
+db.sqlite3-journal
+*.sqlite3
+
+# Fichiers d'environnement (très important)
+.env
+.env.local
+*.env
+
+# Fichiers de configuration locale
+local_settings.py
+
+# Fichiers de media et static collectés
+media/
+staticfiles/
+static_root/
+
+# Logs
+*.log
+
+# IDE / éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Distributions / build
+dist/
+build/
+*.egg-info/
+
+# Autres
+*.pot
+*.mo
