@@ -15,9 +15,9 @@ from django.utils import timezone
 def register(request):
     if request.method == "POST":
 
-        first_name = request.POST.get("first_name")
-        last_name = request.POST.get("last_name")
-        email = request.POST.get("email")
+        first_name = request.POST.get("first_name").strip()
+        last_name = request.POST.get("last_name").strip()
+        email = request.POST.get("email").strip().lower()
         password = request.POST.get("password")
         confirm_password = request.POST.get("confirm_password")
         if password != confirm_password:
@@ -30,17 +30,19 @@ def register(request):
         user = User(email=email, first_name=first_name, last_name=last_name)
         user.set_password(password)
         user.save()
-        messages.success(request, "Compte créé avec succès ! Connectez-vous.")
+        request.session["user_id"] = user.id
+        request.session["user_email"] = user.email
+        messages.success(request, "Compte créé avec succès !")
         return redirect("dashboard")
     return render(request, "register.html")
 
 
 def login(request):
     if request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("password")
+        email = request.POST.get("email").strip().lower()
+        password = request.POST.get("password","")
         try:
-            user = User.objects.get("email")
+            user = User.objects.get(email=email)
             if user.check_password(password) and user.is_active:
                 # store the ID in the session
                 request.session["user_id"] = user.id
@@ -64,7 +66,6 @@ def logout_view(request):
 def dashboard(request):
     user = User.objects.get(id=request.session["user_id"])
     return render(request, "dashboard.html", {"user": user})
-
 
 
 # reset_password
