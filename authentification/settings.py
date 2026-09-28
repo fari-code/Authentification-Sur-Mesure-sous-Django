@@ -128,6 +128,18 @@ STATIC_URL = "static/"
 
 MAILERS = {
     "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {
+            "host": "smtp.gmail.com",
+            "port": 587,
+            "username": config('EMAIL_HOST_USER'),
+            "password": config('EMAIL_HOST_PASSWORD'),
+            "use_tls": True,
+        },
     },
 }
+
+
+DEFAULT_FROM_EMAIL = "noreply@auth.com"
+
+

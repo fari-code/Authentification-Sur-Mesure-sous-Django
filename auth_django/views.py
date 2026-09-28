@@ -76,7 +76,7 @@ def password_reset(request):
         email = request.POST.get("email", "").strip().lower()
 
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.filter(email=email).first()
 
             # Générer le token
             token = user.generate_reset_token()
@@ -115,4 +115,127 @@ L'équipe
             messages.success(request, "Si cet email existe, un lien a été envoyé.")
             return redirect("login")
 
-    return HttpResponse("password_reset_request.html")
+    return render(request,"forgot_password.html")
+
+
+# def password_reset_confirm(request, token):
+#     try:
+#         user = User.objects.get(reset_token=token)
+#     except User.DoesNotExist:
+#         messages.error(request, "Lien invalide ou expiré.")
+#         return redirect("password_reset")
+
+#     # Vérifier la validité du token
+#     if not user.is_reset_token_valid(token):
+#         messages.error(request, "Ce lien a expiré. Veuillez refaire une demande.")
+#         user.clear_reset_token()
+#         return redirect("password_reset")
+
+#     if request.method == "POST":
+#         password = request.POST.get("password")
+#         password2 = request.POST.get("password2")
+
+#         if not password or len(password) < 8:
+#             messages.error(request, "Le mot de passe doit contenir au moins 8 caractères.")
+#             return render(request, "reset-password.html", {"token": token})
+
+#         if password != password2:
+#             messages.error(request, "Les mots de passe ne correspondent pas.")
+#             return render(request, "reset-password.html", {"token": token})
+
+#         # Tout est bon → on change le mot de passe
+#         user.set_password(password)
+#         user.clear_reset_token()          # On invalide le token
+#         user.save()
+
+#         messages.success(request, "Votre mot de passe a été modifié avec succès. Vous pouvez vous connecter.")
+#         return redirect("login")
+
+#     return render(request, "reset-password.html", {"token": token})
+
+def password_reset_confirm(request, token):
+
+    print("TOKEN REÇU :", repr(token))
+
+    try:
+        user = User.objects.get(reset_token=token)
+
+        print("UTILISATEUR TROUVÉ :", user.email)
+        print("TOKEN EN BASE :", repr(user.reset_token))
+        print("EXPIRATION :", user.reset_token_expires)
+
+    except User.DoesNotExist:
+
+        print("❌ AUCUN UTILISATEUR POUR CE TOKEN")
+
+        # Vérification supplémentaire
+        users = User.objects.exclude(reset_token__isnull=True)
+
+        for u in users:
+            print(
+                "TOKEN EN BASE :",
+                repr(u.reset_token),
+                "EMAIL :",
+                u.email
+            )
+
+        messages.error(request, "Lien invalide ou expiré.")
+        return redirect("password_reset")
+
+    if not user.is_reset_token_valid(token):
+
+        print("❌ TOKEN EXPIRÉ OU INVALIDE")
+
+        messages.error(
+            request,
+            "Ce lien a expiré. Veuillez refaire une demande."
+        )
+
+        user.clear_reset_token()
+
+        return redirect("password_reset")
+
+    print("✅ TOKEN VALIDE")
+
+    if request.method == "POST":
+
+        password = request.POST.get("password", "")
+        password2 = request.POST.get("password2", "")
+
+        if not password or len(password) < 8:
+            messages.error(
+                request,
+                "Le mot de passe doit contenir au moins 8 caractères."
+            )
+            return render(
+                request,
+                "reset-password.html",
+                {"token": token}
+            )
+
+        if password != password2:
+            messages.error(
+                request,
+                "Les mots de passe ne correspondent pas."
+            )
+            return render(
+                request,
+                "reset-password.html",
+                {"token": token}
+            )
+
+        user.set_password(password)
+        user.clear_reset_token()
+
+        messages.success(
+            request,
+            "Votre mot de passe a été modifié avec succès."
+        )
+
+        return redirect("login")
+
+    return render(
+        request,
+        "reset-password.html",
+        {"token": token}
+    )

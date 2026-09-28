@@ -36,7 +36,7 @@ class User(models.Model):
 
     def generate_reset_token(self):
         """Génère un token sécurisé et fixe une expiration (1 heure)"""
-        self.reset_token = secrets.token_urlsafe(32)
+        self.reset_token = secrets.token_hex(32)
         self.reset_token_expires = timezone.now() + timezone.timedelta(hours=1)
         self.save()
         return self.reset_token
