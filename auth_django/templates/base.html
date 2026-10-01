@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mon Application{% endblock %}</title>
+    <title>{% block title %}Authentification{% endblock %}</title>
     <!-- Anti-flash : applique le thème AVANT le rendu de la page -->
     <script>
         (function() {
@@ -47,6 +47,30 @@
             -webkit-box-shadow: 0 0 0px 1000px #1f2937 inset;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% if messages %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+
+        {% for message in messages %}
+            Toast.fire({
+                icon: "{{ message.tags }}",
+                title: "{{ message|escapejs }}"
+            });
+        {% endfor %}
+
+    });
+</script>
+{% endif %}
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors">
     {% block content %}{% endblock %}

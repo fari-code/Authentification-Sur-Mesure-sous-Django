@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-_4a(sy8c)g^umop3w%u6c8d)ok@z)8(42e%35_tw=(hk7nbamn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -104,6 +104,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# settings.py
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
@@ -132,14 +134,18 @@ MAILERS = {
         "OPTIONS": {
             "host": "smtp.gmail.com",
             "port": 587,
-            "username": config('EMAIL_HOST_USER'),
-            "password": config('EMAIL_HOST_PASSWORD'),
+            "username": config("EMAIL_HOST_USER"),
+            "password": config("EMAIL_HOST_PASSWORD"),
             "use_tls": True,
         },
     },
 }
 
 
-DEFAULT_FROM_EMAIL = "noreply@auth.com"
+DEFAULT_FROM_EMAIL = "Authentification <dossafarid1@gmail.com>"
 
 
+# Google OAuth
+GOOGLE_CLIENT_ID = config("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = config("GOOGLE_CLIENT_SECRET")
+GOOGLE_REDIRECT_URI = config("GOOGLE_REDIRECT_URI")
