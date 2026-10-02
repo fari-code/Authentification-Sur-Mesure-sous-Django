@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mon Application{% endblock %}</title>
+    <title>{% block title %}Authentification{% endblock %}</title>
+    <!-- Anti-flash : applique le thème AVANT le rendu de la page -->
+    <script>
+        (function() {
+            const saved = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (saved === 'dark' || (!saved && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class', // contrôle manuel via la classe .dark, plus seulement le thème système
             theme: {
                 extend: {
                     colors: {
@@ -20,8 +31,56 @@
             }
         }
     </script>
+    <style>
+        /* Corrige le fond blanc imposé par l'autofill du navigateur (email/mot de passe) */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #111827;
+            -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+        .dark input:-webkit-autofill,
+        .dark input:-webkit-autofill:hover,
+        .dark input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #ffffff;
+            -webkit-box-shadow: 0 0 0px 1000px #1f2937 inset;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% if messages %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+
+        {% for message in messages %}
+            Toast.fire({
+                icon: "{{ message.tags }}",
+                title: "{{ message|escapejs }}"
+            });
+        {% endfor %}
+
+    });
+</script>
+{% endif %}
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 min-h-screen transition-colors">
     {% block content %}{% endblock %}
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+    </script>
 </body>
 </html>

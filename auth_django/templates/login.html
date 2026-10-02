@@ -18,13 +18,6 @@
       <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Connectez-vous à votre compte pour continuer</p>
     </div>
 
-    {% if messages %}
-      {% for message in messages %}
-        <div class="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 rounded-lg px-3 py-2 mb-4">
-          {{ message }}
-        </div>
-      {% endfor %}
-    {% endif %}
 
     <form method="post" class="space-y-5">
       {% csrf_token %}
@@ -37,7 +30,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
             </svg>
           </span>
-          <input type="email" name="email" placeholder="vous@exemple.fr"
+          <input type="email" name="email" required placeholder="vous@exemple.fr"
             class="w-full pl-10 pr-3 py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors">
         </div>
       </div>
@@ -50,7 +43,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
             </svg>
           </span>
-          <input type="password" name="password" id="password" placeholder="Votre mot de passe"
+          <input type="password" name="password" required id="password" placeholder="Votre mot de passe"
             class="w-full pl-10 pr-10 py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors">
           <button type="button" onclick="togglePassword('password')"
             class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300">
@@ -77,8 +70,8 @@
       <span class="text-sm text-gray-400 dark:text-gray-500">ou</span>
       <div class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
     </div>
-{% comment %} {% url 'google_login' %} {% endcomment %}
-    <a href="#"
+
+    <a href="{% url 'google_login' %}"
       class="w-full flex items-center justify-center gap-3 border border-gray-300 dark:border-gray-700 rounded-lg py-3 text-gray-700 dark:text-gray-200 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 48 48">
         <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
