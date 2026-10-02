@@ -86,9 +86,17 @@ WSGI_APPLICATION = "authentification.wsgi.application"
 #         "PORT": config("DB_PORT", default="5432"),
 #     }
 # }
+db_user = config('DB_USER', default='')
+db_password = config('DB_PASSWORD', default='')
+db_host = config('DB_HOST', default='localhost')
+db_port = config('DB_PORT', default='5432')
+db_name = config('DB_NAME', default='')
+
+fallback_db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+
 DATABASES = {
-    "default": dj_database_url.config(
-        default=f"postgresql://{config('DB_USER')}:{config('DB_PASSWORD')}@{config('DB_HOST')}:{config('DB_PORT')}/{config('DB_NAME')}"
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL', default=fallback_db_url)
     )
 }
 
