@@ -1,38 +1,45 @@
-# 🔐 Système d'Authentification Django Custom
+Système d'Authentification Django Custom
 
-Système d’authentification sur-mesure sous Django développé sans django.contrib.auth. Gestion manuelle des sessions (cookies HttpOnly), hachage sécurisé (Bcrypt), réinitialisation de mot de passe et connexion Google OAuth 2.0 pure.
+Système d'authentification sur-mesure sous Django développé sans django.contrib.auth. Le projet gère manuellement les sessions (cookies HttpOnly), le hachage sécurisé des mots de passe (Bcrypt), la réinitialisation de mot de passe et l'authentification Google OAuth 2.0.
 
----
+Fonctionnalités
 
-## ✨ Fonctionnalités
+Inscription (Nom, Prénom, Email, Mot de passe)
 
-- ✅ Inscription (Nom, Prénom, Email, Mot de passe)
-- ✅ Connexion avec Email + Mot de passe
-- ✅ Connexion avec **Google OAuth**
-- ✅ Mot de passe oublié (token + email HTML)
-- ✅ Modification du mot de passe (utilisateur connecté)
-- ✅ Dashboard protégé
-- ✅ Hashage sécurisé avec **bcrypt**
-- ✅ Sessions manuelles
-- ✅ Design moderne avec **Tailwind CSS**
+Connexion avec Email et Mot de passe
 
----
+Connexion via Google OAuth 2.0
 
-## 🛠️ Technologies utilisées
+Réinitialisation de mot de passe (génération de token et envoi d'email HTML)
 
-- Python 3.13
-- Django 6.1
-- PostgreSQL
-- bcrypt
-- Tailwind CSS
-- Gunicorn + Whitenoise
-- Render (déploiement)
+Modification du mot de passe pour les utilisateurs connectés
 
----
+Dashboard protégé
 
-## 📁 Structure du projet
+Hachage sécurisé avec Bcrypt
 
-```bash
+Gestion manuelle des sessions utilisateur
+
+Interface moderne conçue avec Tailwind CSS
+
+Technologies utilisées
+
+Python 3.13
+
+Django 6.1
+
+PostgreSQL
+
+Bcrypt
+
+Tailwind CSS
+
+Gunicorn & WhiteNoise
+
+Render (Déploiement)
+
+Structure du projet
+
 authentification/
 ├── authentification/          # Configuration du projet
 │   ├── settings.py
@@ -54,30 +61,37 @@ authentification/
 │       └── password_reset.html
 ├── static/
 ├── requirements.txt
-├── staticfiles
+├── staticfiles/
 └── README.md
 
-🚀 Installation en local
+
+Installation en local
 
 1. Cloner le projet
 
 git clone https://github.com/fari-code/Authentification-Sur-Mesure-sous-Django.git
-cd TON_REPO
+cd Authentification-Sur-Mesure-sous-Django
+
 
 2. Créer un environnement virtuel
 
 python -m venv env
-source env/bin/activate        # Linux / Mac
-# ou
-env\Scripts\activate           # Windows
+
+# Sur Linux / macOS :
+source env/bin/activate
+
+# Sur Windows :
+env\Scripts\activate
+
 
 3. Installer les dépendances
 
 pip install -r requirements.txt
 
+
 4. Configurer les variables d'environnement
 
-Crée un fichier .env à la racine :
+Créez un fichier .env à la racine du projet avec le contenu suivant :
 
 SECRET_KEY=ton-secret-key-tres-longue
 DEBUG=True
@@ -85,7 +99,7 @@ DEBUG=True
 # Base de données (PostgreSQL local ou SQLite)
 DATABASE_URL=postgres://user:password@localhost:5432/nom_db
 
-# Email (Gmail)
+# Configuration Email (Gmail)
 EMAIL_HOST_USER=tonemail@gmail.com
 EMAIL_HOST_PASSWORD=ton-mot-de-passe-application
 DEFAULT_FROM_EMAIL=Authentification <tonemail@gmail.com>
@@ -95,260 +109,130 @@ GOOGLE_CLIENT_ID=ton-client-id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=ton-client-secret
 GOOGLE_REDIRECT_URI=http://127.0.0.1:8000/google/callback/
 
-5. Migrations
+
+5. Appliquer les migrations
 
 python manage.py makemigrations
 python manage.py migrate
 
-6. Lancer le serveur
+
+6. Lancer le serveur de développement
 
 python manage.py runserver
 
-Ouvre http://127.0.0.1:8000
 
+Accédez à l'application via : http://127.0.0.1:8000
 
+Configuration de Google OAuth
 
-🔑 Google OAuth – Configuration
+Accédez à la Google Cloud Console.
 
+Créez un nouveau projet.
 
+Configurez l'écran de consentement OAuth (OAuth consent screen) en choisissant le type External.
 
+Allez dans Credentials > Create Credentials > OAuth Client ID > Web application.
 
-
-Va sur Google Cloud Console
-
-
-
-Crée un projet
-
-
-
-OAuth consent screen → External
-
-
-
-Credentials → OAuth Client ID → Web application
-
-
-
-Ajoute les Redirect URIs :
-
-
-
-
+Ajoutez les URI de redirection autorisées (Redirect URIs) :
 
 http://127.0.0.1:8000/google/callback/
 
-
-
 http://localhost:8000/google/callback/
 
+Copiez le Client ID et le Client Secret générés dans votre fichier .env.
 
+Déploiement sur Render
 
-Copie le Client ID et Client Secret dans ton .env
+Prérequis
 
+Un fichier requirements.txt à la racine.
 
+Un script de build build.sh (si nécessaire pour exécuter les migrations et la collecte des fichiers statiques).
 
-🌐 Déploiement sur Render (Gratuit)
+Étapes de déploiement
 
-Fichiers nécessaires
+Publiez le code source sur un dépôt GitHub.
 
+Créez un nouveau Web Service sur Render lié à votre dépôt.
 
+Créez une instance PostgreSQL sur Render (offre gratuite).
 
+Ajoutez les variables d'environnement dans les paramètres de votre service sur Render.
 
-
-requirements.txt
-
-
-
-
-Étapes
-
-
-
-
-
-Pousse le projet sur GitHub
-
-
-
-Crée un Web Service sur Render
-
-
-
-Crée une base PostgreSQL (plan Free)
-
-
-
-Ajoute les variables d'environnement
-
-
+Renseignez les commandes suivantes :
 
 Build Command : ./build.sh
 
-
-
 Start Command : gunicorn authentification.wsgi:application
 
-Variables d'environnement sur Render
+Variables d'environnement pour Render
 
-
-
-
-
-
-
-Key
-
-
+Clé
 
 Description
 
-
-
-
-
 SECRET_KEY
 
-
-
-Clé secrète Django
-
-
-
-
+Clé secrète de production Django
 
 DEBUG
 
-
-
 False
-
-
-
-
 
 DATABASE_URL
 
-
-
-URL de la base PostgreSQL Render
-
-
-
-
+URL de la base de données PostgreSQL Render
 
 EMAIL_HOST_USER
 
-
-
-Email Gmail
-
-
-
-
+Adresse Gmail pour l'envoi d'emails
 
 EMAIL_HOST_PASSWORD
 
-
-
 Mot de passe d'application Gmail
-
-
-
-
 
 DEFAULT_FROM_EMAIL
 
-
-
-Expéditeur des emails
-
-
-
-
+Adresse d'expédition affichée
 
 GOOGLE_CLIENT_ID
 
-
-
-Client ID Google
-
-
-
-
+Identifiant client Google OAuth
 
 GOOGLE_CLIENT_SECRET
 
-
-
-Client Secret Google
-
-
-
-
+Clé secrète client Google OAuth
 
 GOOGLE_REDIRECT_URI
 
-
-
 https://ton-app.onrender.com/google/callback/
 
+Email de réinitialisation
 
+Validation du token limitée à 5 minutes.
 
-📧 Email de réinitialisation
+Modèle d'email au format HTML.
 
+Bouton de réinitialisation sécurisé.
 
+Sécurité
 
+Chiffrement des mots de passe géré avec bcrypt.
 
+Tokens de réinitialisation à usage unique avec expiration automatique.
 
-Token valide pendant 5 minutes
+Protection contre les attaques CSRF.
 
+Saisie et gestion sécurisée des cookies de session (HttpOnly).
 
+Messages d'erreur génériques lors de l'authentification pour prévenir l'énumération des utilisateurs.
 
-Email HTML professionnel avec logo
+Auteur
 
+fari-code
 
+Projet d'authentification personnalisée sous Django.
 
-Bouton de réinitialisation stylé
+Licence
 
-
-
-🛡️ Sécurité
-
-
-
-
-
-Mots de passe hashés avec bcrypt
-
-
-
-Tokens de réinitialisation à usage unique + expiration
-
-
-
-Protection CSRF
-
-
-
-Sessions sécurisées
-
-
-
-Messages d'erreur génériques (anti-énumération d'emails)
-
-
-
-👨‍💻 Auteur
-
-Farid Dossa
-Projet d'authentification custom Django
-
-
-
-📝 Licence
-
-Ce projet est open-source. Tu peux le modifier et l'utiliser librement.
-
-
-
+Ce projet est distribué sous licence open-source. Vous êtes libre de le modifier et de l'utiliser.
